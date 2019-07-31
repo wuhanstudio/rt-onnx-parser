@@ -41,6 +41,7 @@ Onnx__ModelProto* onnx_load_model(const char* onnx_file_name)
     if(buffer == RT_NULL)
     {
         rt_kprintf("Failed to malloc memory for %s\n", onnx_file_name);
+        return RT_NULL;
     }
 
     int fd = open(onnx_file_name, O_RDONLY);
@@ -50,11 +51,12 @@ Onnx__ModelProto* onnx_load_model(const char* onnx_file_name)
         close(fd);
         if (size < 0)
         {
+			rt_kprintf("Read file %s failed \n", onnx_file_name);
             return RT_NULL;
         }
     }
 
-    return onnx__model_proto__unpack(NULL, sz, buffer);
+    return onnx__model_proto__unpack(NULL, msg_len, buffer);
 }
 
 void onnx_model_info(Onnx__ModelProto model)

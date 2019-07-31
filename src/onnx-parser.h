@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <dfs_posix.c>
+#include <dfs_posix.h>
 
 #include "onnx.pb-c.h"
 
