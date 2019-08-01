@@ -9,6 +9,10 @@ src     = Glob('src/*.c')
 if GetDepend('ONNX_PARSER_USING_EXAMPLE'):
 	src    += Glob('examples/onnx_parser_example.c')
 
+if GetDepend('ONNX_PARSER_USING_RAM_EXAMPLE'):
+	src    += Glob('examples/mnist_onnx.c')
+	src    += Glob('examples/onnx_parser_ram_example.c')
+
 path   =  [cwd + '/src']
 path   += [cwd + '/examples']
 

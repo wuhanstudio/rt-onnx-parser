@@ -21,6 +21,7 @@ const char* onnx_tensor_proto_data_type[] = {
 
 Onnx__ModelProto* onnx_load_model(const char* onnx_file_name)
 {
+    rt_kprintf("Load model %s\n", onnx_file_name);
     // Get file size first
     int ret;
     struct stat buf;
@@ -54,9 +55,14 @@ Onnx__ModelProto* onnx_load_model(const char* onnx_file_name)
 			rt_kprintf("Read file %s failed \n", onnx_file_name);
             return RT_NULL;
         }
+		rt_kprintf("Sucessfully read file %s\n", onnx_file_name);
     }
 
-    return onnx__model_proto__unpack(NULL, msg_len, buffer);
+    Onnx__ModelProto* model = onnx__model_proto__unpack(NULL, msg_len, buffer);
+	rt_kprintf("Free memory %s\n", onnx_file_name);
+	rt_free(buffer);
+
+    return model;
 }
 
 void onnx_model_info(Onnx__ModelProto model)

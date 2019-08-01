@@ -1,50 +1,43 @@
-#include <string.h>
 #include "onnx-parser.h"
+
+extern unsigned char mnist_onnx[];
+extern unsigned int mnist_onnx_len;
 
 #define THREAD_PRIORITY         8
 #define THREAD_STACK_SIZE       25600
 #define THREAD_TIMESLICE        5
 
 static rt_thread_t tid1 = RT_NULL;
-static char onnx_file_name[20];
 
-static void onnx_parser_entry(void* parameter)
+static void onnx_parser_entry(void* parameters)
 {
-
-    Onnx__ModelProto* model = onnx_load_model(onnx_file_name);
+    // Load Model
+    Onnx__ModelProto* model = onnx__model_proto__unpack(NULL, mnist_onnx_len, mnist_onnx);
 
     // Print Model Info
     if( model != NULL)
     {
         onnx_model_info(*model);
-
 		// Print Graph Info
 		Onnx__GraphProto* graph = model->graph;
 		if(graph != NULL)
 		{
 			onnx_graph_info_sorted(*graph);
 		}
-
+		
 		// Free Model
 		onnx__model_proto__free_unpacked(model, NULL);
-    }
+	}
     else
     {
         rt_kprintf("Decode model failed\n");
     }
 }
 
-static void onnx_parser_example(int argc, char *argv[])
+static void onnx_parser_ram_example(int argc, char *argv[])
 {
-    if (argc < 2) {
-        rt_kprintf("Usage: %s onnx_file_name \n", argv[0]);
-        rt_kprintf("Example: %s /mnist.onnx \n", argv[0]);
-        return;
-    }
-    rt_kprintf("--- Reading from %s ---\n", argv[1]);
-	strcpy (onnx_file_name, argv[1]);
 
-	tid1 = rt_thread_create("tonnx_file",
+	tid1 = rt_thread_create("tonnx_ram",
 					onnx_parser_entry, RT_NULL,
 					THREAD_STACK_SIZE,
 					THREAD_PRIORITY, THREAD_TIMESLICE);
@@ -52,7 +45,7 @@ static void onnx_parser_example(int argc, char *argv[])
     if (tid1 != RT_NULL)
         rt_thread_startup(tid1);
 	else
-		rt_kprintf("Failed to start onnx thread\n");
+		rt_kprintf("Start failed\n");
 
 }
-MSH_CMD_EXPORT(onnx_parser_example, decode onnx model from file);
+MSH_CMD_EXPORT(onnx_parser_ram_example, decode onnx model from file);
