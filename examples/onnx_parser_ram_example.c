@@ -1,3 +1,4 @@
+#include <rtthread.h>
 #include "onnx-parser.h"
 
 extern unsigned char mnist_onnx[];

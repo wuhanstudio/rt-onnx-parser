@@ -1,11 +1,9 @@
 #ifndef __ONNX_PARSER_H__
 #define __ONNX_PARSER_H__
 
-#include <rtthread.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <dfs_posix.h>
 
 #include "onnx.pb-c.h"
 
