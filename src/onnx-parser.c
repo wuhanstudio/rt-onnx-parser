@@ -25,11 +25,11 @@ Onnx__ModelProto* onnx_load_model(const char* onnx_file_name)
     FILE *fp;
 
     // Get File Size
-    fp = fopen(onnx_file_name,"rb"); 
+    fp = fopen(onnx_file_name, "rb"); 
     fseek(fp, 0L, SEEK_END);
     int sz = ftell(fp);
     fseek(fp, 0L, SEEK_SET);
-    // printf("File size %s is %d\n", onnx_file_name, sz);
+    printf("File size %s is %d\n", onnx_file_name, sz);
 
     // Read File
     buffer = (unsigned char*) malloc(sizeof(unsigned char) * sz);
@@ -40,8 +40,11 @@ Onnx__ModelProto* onnx_load_model(const char* onnx_file_name)
     }
     fread(buffer, sz, 1, fp);
 
-	Onnx__ModelProto* model = onnx__model_proto__unpack(NULL, sz, buffer);
-	free(buffer);
+    // Parse Model
+    Onnx__ModelProto* model = onnx__model_proto__unpack(NULL, sz, buffer);
+
+    // Free memory
+    free(buffer);
     fclose(fp);
 
     return model;
@@ -88,7 +91,7 @@ void onnx_graph_info(Onnx__GraphProto graph)
 void onnx_graph_info_sorted(Onnx__GraphProto graph)
 {
     printf("---- Graph Info ----\n");
-    
+
     // Input
     printf("---- Graph Input Info ----\n");
     printf("Graph inputs number: %ld\n", graph.n_input);
@@ -128,7 +131,7 @@ void onnx_graph_input_info(Onnx__ValueInfoProto input)
 
     printf("Input type %s\n", onnx_tensor_proto_data_type[tensor_type.elem_type]);
     printf("Input dimension %ld\n", shape.n_dim);
-    
+
     for(int i = 0; i < shape.n_dim; i++)
     {
         onnx_graph_value_tensor_shape_dimension_info(*(shape.dim[i]));
@@ -142,7 +145,6 @@ void onnx_graph_input_info(Onnx__ValueInfoProto input)
 
 void onnx_graph_value_tensor_shape_dimension_info(Onnx__TensorShapeProto__Dimension dim)
 {
-    
     switch (dim.value_case)
     {
         case ONNX__TENSOR_SHAPE_PROTO__DIMENSION__VALUE__NOT_SET:
