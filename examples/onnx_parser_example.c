@@ -17,13 +17,13 @@ static void onnx_parser_entry(void* parameter)
     // Print Model Info
     if( model != NULL)
     {
-        onnx_model_info(*model);
+        onnx_model_info(model);
 
         // Print Graph Info
         Onnx__GraphProto* graph = model->graph;
         if(graph != NULL)
         {
-            onnx_graph_info_sorted(*graph);
+            onnx_graph_info_sorted(graph);
         }
 
         // Free Model
