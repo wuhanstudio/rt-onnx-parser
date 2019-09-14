@@ -88,7 +88,7 @@ void onnx_graph_info(Onnx__GraphProto* graph)
 void onnx_graph_info_sorted(Onnx__GraphProto* graph)
 {
     printf("---- Graph Info ----\n");
-    
+
     // Input
     printf("---- Graph Input Info ----\n");
     printf("Graph inputs number: %ld\n", graph->n_input);
